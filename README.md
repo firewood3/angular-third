@@ -21,61 +21,6 @@
 - 지시자 *ngFor를 사용하여 Iterable 객체를 바인딩 할 수 있다.
 
 ***
-## 함수
-
-### JavaScript의 this
-JavaScript의 this는 함수의 호출 방식에 따라 값이 달라진다.
-1. 함수에서 호출
-2. 메서드에서 호출
-3. 생성자에서 호출
-4. apply에서 호출
-5. bind에서 호출
-
-- 함수호출 시 this는 상위 스코프가 따로 없기 때문에 전역 객체를 가리키는데, 웹 브라우저에서의 전역 객체는 window이다.
-- 다만 ECMAScript 5.1에서 코드 안정성과 오류 검증을 용이하게 하기 위해 만든 엄격모드(use strict)를 사용하면 함수에서의 this는 undefined이다.
-- obj.myFunc(); 형태로 호출하면 메서드가 실행되지만 var someFunc = obj.myFunc; someFunc(); 형태로 호출하거나 setTimeout(obj.myFunc,1000); 형태로 호출하면 메서드가 객체로부터 분리되어 함수형태로 호출된다.
-
-- 생성자에서 호출
-```js
-function ConstructorFunc(msg) {
-    this.msg = msg;
-}
-ConstructorFunc.protorype.hello = function() {
-    console.log(this.msg); // 이 this는 ConstructorFunc의 this이다.
-}
-var obj = new ConstructorFunc("Hello World!");
-obj.hello(); // Hello World!
-```
-
-- apply 호출: apply호출은 apply 함수를 사용해 호출하여 함수 내부에서 사용할 this를 지정하는 것이다. apply 함수의 첫번째 인자로 null을 넘기면 전역 객체인 window가 this가 된다.
-
-
-### 선택적(Optional) / 기본(default) 파라미터
-```ts
-function Book(title: string, length?: number) {}
-```
-
-```ts
-function Book(titile: string, length:number=300) {}
-```
-
-### 나머지 Rest 파라미터
-```ts
-function School(name: string. ...id:number[]){}
-let harvad = new School("Harvard", 1,2,3,4,5,6,7);
-```
-
-### 함수 로버로딩
-Ts에서는 함수 오버로딩의 구현이 어색하다.
-```ts
-function getCustomer(name:string):string;
-function getCustomer(id:number):string;
-function getCustomer(property:any)string{
-    if(typeof property == 'string') {}
-    else if(typeof property == 'number'){}
-    return "customer";
-}
-```
 
 ## 클래스
 객체지향 프로그래밍
@@ -271,7 +216,7 @@ let news: IEspn = {
 
 
 ### 서비스 구현
-API를 받아오는 서비스를 Root Provider에 등록
+API를 받아오는 서비스를 Root Provider에 등록, 컴포넌트에서는 주입받아 사용가능 싱글톤으로 생성됨.
 ```ts
 @Injectable({
   providedIn: 'root'
@@ -279,6 +224,7 @@ API를 받아오는 서비스를 Root Provider에 등록
 ```
 
 ### 라우터 구현
+라우터를 생성하고 app.modules.ts에 등록하여야함
 ```code
 ng generate module app-routing --flat --module=app
 ```
@@ -290,6 +236,7 @@ ng generate module app-routing --flat --module=app
 ```
 
 ### HTTPClient 사용
+app.modules.ts에 등록하여 사용함
 ```ts
 public fetchNewsFeed(source: string): Observable<News> {
   return this
