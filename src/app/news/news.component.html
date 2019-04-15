@@ -15,7 +15,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor='let article of latest_news.Articles'>
+        <tr *ngFor='let article of latest_news.articles'>
           <td>
             <img [src]='article.urlToImage' [title]='article.title | uppercase' [style.width.px]='50' [style.margin.px]='5'>
           </td>

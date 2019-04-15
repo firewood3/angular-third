@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {News} from '../../models/news';
-import {Article} from '../../models/article';
-import {IArticle} from '../../models/IArticle';
+import {ActivatedRoute} from '@angular/router';
+import {NewsApiService} from '../news-api/news-api.service';
 
 @Component({
   selector: 'app-news',
@@ -10,16 +10,30 @@ import {IArticle} from '../../models/IArticle';
 })
 export class NewsComponent implements OnInit {
 
-  source:string = "nfl";
-  latest_news: News;
+  source:string;
+  latest_news: News = new News("OK",this.source,"top");
+  errorMessage = '';
+  feedType: string;
 
-  constructor() { }
+  constructor(private _service: NewsApiService, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    this.latest_news = this.seedNewsData();
+    console.log("33");
+    this.route.data.subscribe(data => {
+      console.log(data);
+      this.feedType = (data as any).feedType;
+      this.source = (data as any).source;
+    });
+
+    this._service.fetchNewsFeed(this.feedType)
+      .subscribe(
+        items => this.latest_news = (items),
+        error => {this.errorMessage = 'Could not load ' + this.feedType + ' stories.'; console.log(this.errorMessage)},
+        () => {console.log(this.latest_news.articles)}
+      );
   }
 
-  private seedNewsData(): News{
+  /*private seedNewsData(): News{
     let news:News= new News("Ok","NFL","top");
     news.Articles = this.seedArcticles();
     return news;
@@ -74,6 +88,6 @@ export class NewsComponent implements OnInit {
     articles.push(tempArticle);
 
     return articles;
-  }
+  }*/
 
 }
